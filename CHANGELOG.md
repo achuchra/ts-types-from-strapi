@@ -1,5 +1,11 @@
 # ts-types-from-strapi
 
+## 0.2.2
+
+### Patch Changes
+
+- f12ea33: fix
+
 ## 0.2.1
 
 ### Patch Changes

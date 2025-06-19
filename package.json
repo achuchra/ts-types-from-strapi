@@ -1,6 +1,6 @@
 {
   "name": "ts-types-from-strapi",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Generate TypeScript interfaces for frontend from Strapi content types",
   "keywords": [
     "typescript",
@@ -31,7 +31,7 @@
   ],
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --build",
     "ci": "npm run build",
     "local-release": "changeset version && changeset publish"
   },
