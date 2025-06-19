@@ -1,0 +1,43 @@
+{
+  "name": "ts-types-from-strapi",
+  "version": "0.0.1",
+  "description": "Generate TypeScript interfaces for frontend from Strapi content types",
+  "keywords": [
+    "typescript",
+    "types",
+    "interfaces",
+    "strapi",
+    "content-types",
+    "schema",
+    "generate",
+    "generator"
+  ],
+  "homepage": "https://github.com/achuchra/ts-types-from-strapi",
+  "bugs": {
+    "url": "https://github.com/achuchra/ts-types-from-strapi/issues"
+  },
+  "author": "Andrzej Chuchra <andrzej.chuchra@gmail.com>",
+  "license": "MIT",
+  "main": "dist/generate.js",
+  "bin": {
+    "ts-types-from-strapi": "dist/generate.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+github.com:achuchra/ts-types-from-strapi.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "ci": "npm run build",
+    "local-release": "changeset version && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.4",
+    "@types/node": "^20",
+    "typescript": "^5.8.3"
+  }
+}
