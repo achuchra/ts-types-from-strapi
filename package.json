@@ -1,6 +1,6 @@
 {
   "name": "ts-types-from-strapi",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Generate TypeScript interfaces for frontend from Strapi content types",
   "keywords": [
     "typescript",
