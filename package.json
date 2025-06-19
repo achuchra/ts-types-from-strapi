@@ -29,7 +29,7 @@
   "files": [
     "dist"
   ],
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "build": "tsc",
     "ci": "npm run build",

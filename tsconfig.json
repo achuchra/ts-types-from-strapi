@@ -12,7 +12,11 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "module": "Preserve",
-    "outDir": "dist"
+    "module": "preserve",
+    "outDir": "dist",
+    "rootDir": "src",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true
   }
 }
