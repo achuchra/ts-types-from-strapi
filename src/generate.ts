@@ -4,14 +4,13 @@
  * Generate TypeScript interfaces for frontend from Strapi content types
  *
  * Usage:
- *   node generate-types.ts [backend-types-path] [frontend-types-path]
+ *   node generate-types.ts <strapi-content-types-path> <output-types-path>
  *
  * Arguments:
- *   backend-types-path   Path to Strapi generated content types (default: ../backend/types/generated/contentTypes.d.ts)
- *   frontend-types-path  Path to output frontend types (default: ../frontend/src/types/strapi.ts)
+ *   strapi-content-types-path   Path to Strapi generated content types (required)
+ *   output-types-path  Path to output frontend types (required)
  *
  * Examples:
- *   node generate-types.ts
  *   node generate-types.ts ./backend/types/generated/contentTypes.d.ts ./frontend/src/types/strapi.ts
  *   node generate-types.ts /path/to/backend/types.d.ts /path/to/frontend/types.ts
  */
@@ -36,27 +35,39 @@ if (process.argv.includes("-h") || process.argv.includes("--help")) {
 Generate TypeScript interfaces for frontend from Strapi content types
 
 Usage:
-  node generate-types.ts [backend-types-path] [frontend-types-path]
+  node generate-types.ts <strapi-content-types-path> <output-types-path>
 
 Arguments:
-  backend-types-path   Path to Strapi generated content types (default: ../backend/types/generated/contentTypes.d.ts)
-  frontend-types-path  Path to output frontend types (default: ../frontend/src/types/strapi.ts)
+  strapi-content-types-path   Path to Strapi generated content types (required)
+  output-types-path  Path to output frontend types (required)
 
 Examples:
-  node generate-types.ts
   node generate-types.ts ./backend/types/generated/contentTypes.d.ts ./frontend/src/types/strapi.ts
   node generate-types.ts /path/to/backend/types.d.ts /path/to/frontend/types.ts
 `);
   process.exit(0);
 }
 
-// Get paths from command line arguments or use defaults
+// Get paths from command line arguments - both are required
 const args = process.argv.slice(2);
-const BACKEND_TYPES_PATH =
-  args[0] ||
-  path.join(__dirname, "../backend/types/generated/contentTypes.d.ts");
-const FRONTEND_TYPES_PATH =
-  args[1] || path.join(__dirname, "../frontend/src/types/strapi.ts");
+if (args.length < 2) {
+  console.error("Error: Both input and output paths are required.");
+  console.log(`
+Usage:
+  ts-types-from-strapi <strapi-content-types-path> <output-types-path>
+
+Arguments:
+  strapi-content-types-path   Path to Strapi generated content types
+  output-types-path  Path to output frontend types
+
+Examples:
+  ts-types-from-strapi ./strapi/types/generated/contentTypes.d.ts ./frontend/src/types/strapi.ts
+  ts-types-from-strapi /path/to/strapi/types.d.ts /path/to/output/types.ts
+`);
+  process.exit(1);
+}
+const STRAPI_CONTENT_TYPES_PATH = args[0];
+const OUTPUT_TYPES_PATH = args[1];
 
 function convertTypeNameToPascalCase(typeName: string): string {
   return typeName
@@ -246,29 +257,37 @@ function parseAttributes(attributesContent: string): Attribute[] {
 
 function generateTypes(): void {
   try {
+    if (!STRAPI_CONTENT_TYPES_PATH || !OUTPUT_TYPES_PATH) {
+      console.error("Error: Both input and output paths must be provided.");
+      process.exit(1);
+    }
     // Validate input file exists
-    if (!fs.existsSync(BACKEND_TYPES_PATH)) {
-      throw new Error(`Backend types file not found: ${BACKEND_TYPES_PATH}`);
+    if (!fs.existsSync(STRAPI_CONTENT_TYPES_PATH)) {
+      throw new Error(
+        `Strapi content types file not found: ${STRAPI_CONTENT_TYPES_PATH}`
+      );
     }
 
     // Ensure output directory exists
-    const outputDir = path.dirname(FRONTEND_TYPES_PATH);
+    const outputDir = path.dirname(OUTPUT_TYPES_PATH);
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
-    console.log(`Reading backend types from: ${BACKEND_TYPES_PATH}`);
-    console.log(`Writing frontend types to: ${FRONTEND_TYPES_PATH}`);
+    console.log(
+      `Reading Strapi content types from: ${STRAPI_CONTENT_TYPES_PATH}`
+    );
+    console.log(`Writing types to: ${OUTPUT_TYPES_PATH}`);
 
-    // Read the backend types file
-    const backendContent = fs.readFileSync(BACKEND_TYPES_PATH, "utf8");
+    // Read the input types file
+    const inputContent = fs.readFileSync(STRAPI_CONTENT_TYPES_PATH, "utf8");
 
     // Split content by interfaces using a more robust approach
     const interfaceRegex = /export interface (\w+)[^{]*\{([\s\S]*?)\n\}/g;
     const interfaces: ParsedInterface[] = [];
     let match: RegExpExecArray | null;
 
-    while ((match = interfaceRegex.exec(backendContent)) !== null) {
+    while ((match = interfaceRegex.exec(inputContent)) !== null) {
       if (match[1] && match[2]) {
         const interfaceName = match[1];
         const interfaceContent = match[2];
@@ -307,11 +326,11 @@ function generateTypes(): void {
       })
       .join("\n\n");
 
-    // Write to frontend types file
-    fs.writeFileSync(FRONTEND_TYPES_PATH, generatedTypes);
+    // Write to output path
+    fs.writeFileSync(OUTPUT_TYPES_PATH, generatedTypes);
 
     console.log(
-      `Generated ${interfaces.length} interfaces in ${FRONTEND_TYPES_PATH}`
+      `\x1b[32mGenerated ${interfaces.length} interfaces in ${OUTPUT_TYPES_PATH}\x1b[0m`
     );
   } catch (error) {
     console.error("Error generating types:", error);
