@@ -1,5 +1,12 @@
 # ts-types-from-strapi
 
+## 0.2.3
+
+### Patch Changes
+
+- d929aa1: fix module type + tsconfig
+- 79b214b: fix module types
+
 ## 0.2.2
 
 ### Patch Changes
