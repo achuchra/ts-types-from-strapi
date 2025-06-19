@@ -1,5 +1,11 @@
 # ts-types-from-strapi
 
+## 0.2.4
+
+### Patch Changes
+
+- 378b5ce: fix type
+
 ## 0.2.3
 
 ### Patch Changes
