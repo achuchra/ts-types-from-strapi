@@ -15,7 +15,7 @@
  *   node generate-types.ts ./backend/types/generated/contentTypes.d.ts ./frontend/src/types/strapi.ts
  *   node generate-types.ts /path/to/backend/types.d.ts /path/to/frontend/types.ts
  */
-
+"use strict";
 import fs from "fs";
 import path from "path";
 
