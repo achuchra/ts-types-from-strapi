@@ -1,5 +1,11 @@
 # ts-types-from-strapi
 
+## 0.2.1
+
+### Patch Changes
+
+- f9e912f: fix module type
+
 ## 0.2.0
 
 ### Minor Changes
